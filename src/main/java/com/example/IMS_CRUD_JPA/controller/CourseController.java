@@ -9,17 +9,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api/course")
+@RequestMapping(path = "/courses")
 public class CourseController {
     @Autowired
     CourseService courseService;
     @GetMapping
     public List<Course> getAllCourse(){
+
         return courseService.getAllCourses();
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public Optional<Course> getSpesificCourse(@PathVariable int id){
+
         return courseService.getSpesificCourse(id);
     }
 
@@ -28,13 +30,14 @@ public class CourseController {
         return courseService.registerCourse(courseCreate);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public  Optional<Course> updateCourse(@PathVariable int id, @RequestBody Course upToDatecourse ){
         return courseService.updateCourse(id, upToDatecourse);
     }
 
     @DeleteMapping(path = "/{id}")
     public void deleteSpesificCourse(@PathVariable int id){
+
         courseService.dropSpesificCourse(id);
     }
 }

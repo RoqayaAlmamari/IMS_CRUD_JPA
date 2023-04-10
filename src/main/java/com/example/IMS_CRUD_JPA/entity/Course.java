@@ -9,6 +9,7 @@ public class Course {
     @Column
     public int id;
 
+
     @Column
     public String name;
 

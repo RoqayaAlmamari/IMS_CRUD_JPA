@@ -2,73 +2,41 @@ package com.example.IMS_CRUD_JPA.controller;
 
 import com.example.IMS_CRUD_JPA.entity.Student;
 import com.example.IMS_CRUD_JPA.service.StudentService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/students")
-@Controller
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/students")
 public class StudentController {
-	
+
+	@Autowired
 	private StudentService studentService;
 
-	public StudentController(StudentService studentService) {
-		super();
-		this.studentService = studentService;
-	}
-	
-	// handler method to handle list students and return mode and view
-	@GetMapping("/")
-	public String listStudents(Model model) {
-		model.addAttribute("students", studentService.getAllStudents());
-		return "students";
-	}
-	
-	@GetMapping("/new")
-	public String createStudentForm(Model model) {
-		
-		// create student object to hold student form data
-		Student student = new Student();
-		model.addAttribute("student", student);
-		return "create_student";
-		
-	}
-	
-	@PostMapping("/students")
-	public String saveStudent(@ModelAttribute("student") Student student) {
-		studentService.saveStudent(student);
-		return "redirect:/students";
-	}
-	
-	@GetMapping("/students/edit/{id}")
-	public String editStudentForm(@PathVariable Long id, Model model) {
-		model.addAttribute("student", studentService.getStudentById(id));
-		return "edit_student";
+	@GetMapping
+	public List<Student> getAllStudents() {
+		return studentService.getAllStudentInfo();
 	}
 
-	@PostMapping("/{id}")
-	public String updateStudent(@PathVariable Long id,
-			@ModelAttribute("student") Student student,
-			Model model) {
-		
-		// get student from database by id
-		Student existingStudent = studentService.getStudentById(id);
-		existingStudent.setId(id);
-		existingStudent.setFirstName(student.getFirstName());
-		existingStudent.setLastName(student.getLastName());
-		existingStudent.setEmail(student.getEmail());
-		
-		// save updated student object
-		studentService.updateStudent(existingStudent);
-		return "redirect:/students";		
-	}
-	
-	// handler method to handle delete student request
-	
 	@GetMapping("/{id}")
-	public String deleteStudent(@PathVariable Long id) {
-		studentService.deleteStudentById(id);
-		return "redirect:/students";
+	public Optional<Student> getSpecificStudent(@PathVariable int id) {
+		return studentService.getSpecificStudentInfo(id);
 	}
-	
+
+	@PostMapping
+	public Student createStudent(@RequestBody Student student) {
+		return studentService.courseStudent(student);
+	}
+
+	@PutMapping("/{id}")
+	public Optional<Student> updateSpecificStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
+		return studentService.updateSpecificStudentInfo(id, updatedStudent);
+	}
+
+	@DeleteMapping("/{id}")
+	public void deleteSpecificStudent(@PathVariable int id) {
+		studentService.deleteSpecificStudentInfo(id);
+	}
 }

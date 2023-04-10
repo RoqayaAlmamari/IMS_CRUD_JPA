@@ -38,4 +38,8 @@ public class CourseService {
                 });
         return optionalCourse;
     }
+
+    public void deleteSpecificCourseInfo(int id) {
+        courseRepository.deleteById(id);
+    }
 }

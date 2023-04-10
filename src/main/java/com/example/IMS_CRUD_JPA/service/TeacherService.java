@@ -38,4 +38,8 @@ public class TeacherService {
         );
         return optionalTeacher;
     }
+
+    public void deleteSpecificTeacherInfo(int id) {
+        teacherRepository.deleteById(id);
+    }
 }
